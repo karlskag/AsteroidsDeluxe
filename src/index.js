@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { GameStage } from '../components/GameStage';
 
 const title = "My revamped Astroids-app!!";
 
 ReactDOM.render(
-  <div>{title}</div>,
+  <GameStage />,
   document.getElementById('app')
 );

@@ -26,31 +26,32 @@ function getInitialState(initialPosition) {
 }
 
 function pressUp(state, isPressed) {
-  let up = state.gameController.up;
   return Object.assign({}, state, {
-    up : isPressed
+    gameController:  Object.assign({}, state.gameController, {
+      up: isPressed
+    })
   })
 }
 
 function pressLeft(state, isPressed) {
-  let left = state.gameController.left;
   return Object.assign({}, state, {
-    left : isPressed
-  })
+    gameController:  Object.assign({}, state.gameController, {
+      left: isPressed
+    })  })
 }
 
 function pressRight(state, isPressed) {
-  let right = state.gameController.right;
   return Object.assign({}, state, {
-    right : isPressed
-  })
+    gameController:  Object.assign({}, state.gameController, {
+      right: isPressed
+    })  })
 }
 
 function pressSpace(state, isPressed) {
-  let space = state.gameController.space;
-  console.log("zap");
   return Object.assign({}, state, {
-    space : isPressed
+    gameController:  Object.assign({}, state.gameController, {
+      space: isPressed
+    })
   })
 }
 

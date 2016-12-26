@@ -8,7 +8,7 @@ function getInitialState(initialPosition) {
         y: 0,
       },
       rotation: 0,
-      rotationspeed: 6,
+      rotationSpeed: 6,
       speed: 0.15,
       inertia: 0.99,
       radius: 20,
@@ -61,8 +61,12 @@ function isAccelerating(state) {
   return state.gameController.up;
 }
 
-function isTurning(state) {
-  return state.gameController.left || state.gameController.right;
+function isTurningLeft(state) {
+  return state.gameController.left;
+}
+
+function isTurningRight(state) {
+  return state.gameController.right;
 }
 
 function updateShipPosition(state, newPosition) {
@@ -81,6 +85,14 @@ function updateShipVelocity(state, newVelocity) {
   })
 }
 
+function updateRotation(state, newRotation) {
+  return Object.assign({}, state, {
+    ship: Object.assign({}, state.ship, {
+      rotation: newRotation
+    })
+  })
+}
+
 export const gameState = {
   getInitialState: getInitialState,
   pressUp: pressUp,
@@ -88,7 +100,9 @@ export const gameState = {
   pressRight: pressRight,
   pressSpace: pressSpace,
   isAccelerating: isAccelerating,
-  isTurning: isTurning,
+  isTurningLeft: isTurningLeft,
+  isTurningRight: isTurningRight,
   updateShipPosition: updateShipPosition,
-  updateShipVelocity: updateShipVelocity
+  updateShipVelocity: updateShipVelocity,
+  updateRotation: updateRotation
 }

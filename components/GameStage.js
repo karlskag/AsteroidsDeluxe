@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { gameState } from '../src/state/gameState.js';
-import keys from '../src/core/controlKeys.js';
+import KEYS from '../src/core/controlKeys.js';
 import movement from '../src/core/movement.js';
 
 /*
@@ -23,7 +23,13 @@ export class GameStage extends Component {
         width: window.innerWidth,
         height: window.innerHeight,
       },
-      context: null
+      context: null,
+      keys: {
+        up: 0,
+        right: 0,
+        left: 0,
+        space: 0
+      }
     };
   }
 
@@ -33,10 +39,10 @@ export class GameStage extends Component {
     this.setState({ context: context });
 
     //hook up the game controller
-    window.addEventListener('keyup', this.handleKeys.bind(this, this.state.currentState, false));
-    window.addEventListener('keydown', this.handleKeys.bind(this, this.state.currentState, true));
+    window.addEventListener('keyup', this.handleKeys.bind(this, false));
+    window.addEventListener('keydown', this.handleKeys.bind(this, true));
 
-    requestAnimationFrame(() => {this.updateCanvas(this.state.currentState)});
+    requestAnimationFrame(() => {this.updateCanvas()});
   }
 
   componentWillUnmount() {
@@ -45,8 +51,15 @@ export class GameStage extends Component {
     window.removeEventListener('keydown', this.handleKeys);
   }
 
-  updateCanvas(currentState) {
+  updateCanvas() {
     const context = this.state.context;
+    const keys = this.state.keys;
+    let currentState = this.state.currentState;
+
+    currentState = gameState.pressUp(currentState, keys.up);
+    currentState = gameState.pressRight(currentState, keys.right);
+    currentState = gameState.pressLeft(currentState, keys.left);
+    currentState = gameState.pressSpace(currentState, keys.space);
 
     //Draw canvas and entities
     context.fillRect(0,0, this.state.viewSize.width, this.state.viewSize.height);
@@ -56,21 +69,21 @@ export class GameStage extends Component {
     const newState = movement.move(currentState);
     this.setState({ currentState: newState });
 
-    requestAnimationFrame(() => {this.updateCanvas(this.state.currentState)});
+    requestAnimationFrame(() => {this.updateCanvas()});
   }
 
   //TODO should this whole function be moved to core or utils?
-  handleKeys(currentState, value, e) {
-    let newState = currentState;
+  handleKeys(value, e) {
+    let keys = this.state.keys;
 
     //TODO: Abstract all method calls to core. Ex. core.move, core.accelerate or core.turn?
     //we should never call state direct from view.
-    if(e.keyCode === keys.UP) { newState = gameState.pressUp(currentState, value); }
-    if(e.keyCode === keys.RIGHT) { newState = gameState.pressRight(currentState, value); }
-    if(e.keyCode === keys.LEFT) { newState = gameState.pressLeft(currentState, value); }
-    if(e.keyCode === keys.SPACE) { newState = gameState.pressSpace(currentState, value); }
+    if (e.keyCode === KEYS.UP) { keys.up = value }
+    if (e.keyCode === KEYS.RIGHT) { keys.right = value }
+    if (e.keyCode === KEYS.LEFT) { keys.left = value }
+    if (e.keyCode === KEYS.SPACE) { keys.space = value }
 
-    this.setState({ currentState: newState });
+    this.setState({ keys: keys });
   }
 
   drawShip(context, currentState) {
@@ -94,9 +107,12 @@ export class GameStage extends Component {
 
   render() {
     return (
-      <canvas ref="canvas"
-      width={this.state.viewSize.width}
-      height={this.state.viewSize.height}/>
+      <div>
+        <canvas ref="canvas"
+        width={this.state.viewSize.width}
+        height={this.state.viewSize.height}
+        />
+      </div>
     );
   }
 }

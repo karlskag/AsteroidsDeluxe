@@ -14,6 +14,8 @@ function getInitialState(initialPosition) {
       radius: 20,
       lastShot: 0,
     },
+    asteroids: [],
+    shots: [],
     gameController : {
       up: 0,
       left: 0,
@@ -35,7 +37,7 @@ function pressUp(state, isPressed) {
 
 function pressLeft(state, isPressed) {
   return Object.assign({}, state, {
-    gameController:  Object.assign({}, state.gameController, {
+    gameController: Object.assign({}, state.gameController, {
       left: isPressed
     })
   })
@@ -43,7 +45,7 @@ function pressLeft(state, isPressed) {
 
 function pressRight(state, isPressed) {
   return Object.assign({}, state, {
-    gameController:  Object.assign({}, state.gameController, {
+    gameController: Object.assign({}, state.gameController, {
       right: isPressed
     })
   })
@@ -51,7 +53,7 @@ function pressRight(state, isPressed) {
 
 function pressSpace(state, isPressed) {
   return Object.assign({}, state, {
-    gameController:  Object.assign({}, state.gameController, {
+    gameController: Object.assign({}, state.gameController, {
       space: isPressed
     })
   })
@@ -67,6 +69,10 @@ function isTurningLeft(state) {
 
 function isTurningRight(state) {
   return state.gameController.right;
+}
+
+function isShooting(state) {
+  return state.gameController.space;
 }
 
 function updateShipPosition(state, newPosition) {
@@ -93,6 +99,32 @@ function updateRotation(state, newRotation) {
   })
 }
 
+function createShot(initialPosition, velocity, rotation, speed) {
+  return {
+    position: initialPosition,
+    velocity: velocity,
+    rotation: rotation,
+    speed: speed,
+    fireTime: Date.now()
+  }
+}
+
+function updateShots(state, newShots) {
+  return Object.assign({}, state, {
+    shots: newShots
+  })
+}
+
+function updateShotPosition(shot, newPosition) {
+  return Object.assign({}, shot, {
+    position: newPosition
+  })
+}
+
+function getShipPosition(position) {
+  return Object.assign({}, position)
+}
+
 export const gameState = {
   getInitialState: getInitialState,
   pressUp: pressUp,
@@ -102,7 +134,12 @@ export const gameState = {
   isAccelerating: isAccelerating,
   isTurningLeft: isTurningLeft,
   isTurningRight: isTurningRight,
+  isShooting: isShooting,
   updateShipPosition: updateShipPosition,
   updateShipVelocity: updateShipVelocity,
-  updateRotation: updateRotation
+  updateRotation: updateRotation,
+  createShot: createShot,
+  updateShots: updateShots,
+  updateShotPosition: updateShotPosition,
+  getShipPosition: getShipPosition
 }

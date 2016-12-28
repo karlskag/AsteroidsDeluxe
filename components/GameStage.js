@@ -62,22 +62,26 @@ export class GameStage extends Component {
     currentState = gameState.pressSpace(currentState, keys.space);
 
     //Draw canvas and entities
+    context.fillstyle = '#000';
+    context.globalAlpha = 0.6;
     context.fillRect(0,0, this.state.viewSize.width, this.state.viewSize.height);
+    context.globalAlpha = 1;
     this.drawShip(context, currentState);
+    this.drawShots(context, currentState);
 
     //Update state with movements
-    const newState = movement.move(currentState);
+    let newState = currentState;
+    newState = movement.moveShip(newState, this.state.viewSize.width, this.state.viewSize.height);
+    newState = movement.moveShots(newState, this.state.viewSize.width, this.state.viewSize.height);
+
     this.setState({ currentState: newState });
 
     requestAnimationFrame(() => {this.updateCanvas()});
   }
 
-  //TODO should this whole function be moved to core or utils?
   handleKeys(value, e) {
     let keys = this.state.keys;
 
-    //TODO: Abstract all method calls to core. Ex. core.move, core.accelerate or core.turn?
-    //we should never call state direct from view.
     if (e.keyCode === KEYS.UP) { keys.up = value }
     if (e.keyCode === KEYS.RIGHT) { keys.right = value }
     if (e.keyCode === KEYS.LEFT) { keys.left = value }
@@ -103,6 +107,22 @@ export class GameStage extends Component {
     context.fill();
     context.stroke();
     context.restore();
+  }
+
+  drawShots(context, currentState) {
+    const shots = currentState.shots;
+    for (let shot in shots) {
+      context.save();
+      context.translate(shots[shot].position.x, shots[shot].position.y);
+      context.rotate(shots[shot].rotation * Math.PI / 180);
+      context.fillStyle = '#FFF';
+      context.lineWidth = 0,5;
+      context.beginPath();
+      context.arc(0, 0, 2, 0, 2 * Math.PI);
+      context.closePath();
+      context.fill();
+      context.restore();
+    }
   }
 
   render() {

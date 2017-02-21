@@ -59,6 +59,10 @@ function moveShots(state, maxWidth, maxHeight) {
   return newState;
 }
 
+function moveAsteroids(state, maxWidth, maxHeight) {
+
+}
+
 function isFiringConditionsOK(state) {
   if (state.shots.length > 0) {
     const deltaTime = Date.now() - state.shots[state.shots.length - 1].fireTime;

@@ -1,4 +1,6 @@
 
+import { asteroidVertices, randomNumBetween } from '../helper.js';
+
 function getInitialState(initialPosition) {
   const state = {
     ship : {
@@ -14,7 +16,7 @@ function getInitialState(initialPosition) {
       radius: 20,
       lastShot: 0,
     },
-    asteroids: [],
+    asteroids: getInitialAsterois(),
     shots: [],
     gameController : {
       up: 0,
@@ -25,6 +27,23 @@ function getInitialState(initialPosition) {
   };
 
   return state;
+}
+
+function getInitialAsterois(numberOfAsteroids) {
+  const initialAsteroids = [];
+
+  for (let i = 0; i < numberOfAsteroids; i++) {
+    // let initalposition =
+    // let velocity =
+    // let rotation =
+    // let speed =
+    // let vertices = asteroidVertices(3, 40);
+    // let newAsteroid = createAsteroid(initalposition, velocity, rotation, speed, vertices);
+
+    initialAsteroids.push(newAsteroid);
+  }
+
+  return initialAsteroids;
 }
 
 function pressUp(state, isPressed) {
@@ -109,6 +128,16 @@ function createShot(initialPosition, velocity, rotation, speed) {
   }
 }
 
+function createAsteroid(initalposition, velocity, rotation, speed, vertices) {
+  return {
+    position: initalposition,
+    velocity: velocity,
+    rotation: rotation,
+    speed: speed,
+    vertices: vertices
+  }
+}
+
 function updateShots(state, newShots) {
   return Object.assign({}, state, {
     shots: newShots
@@ -139,6 +168,7 @@ export const gameState = {
   updateShipVelocity: updateShipVelocity,
   updateRotation: updateRotation,
   createShot: createShot,
+  createAsteroid: createAsteroid,
   updateShots: updateShots,
   updateShotPosition: updateShotPosition,
   getShipPosition: getShipPosition

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { gameState } from '../src/state/gameState.js';
 import KEYS from '../src/core/controlKeys.js';
 import movement from '../src/core/movement.js';
+import * as drawHelper from './drawFunctions.js';
 
 /*
 * The goal of this GameStage-component is to encapsulate and handle all
@@ -56,6 +57,7 @@ export class GameStage extends Component {
     const keys = this.state.keys;
     let currentState = this.state.currentState;
 
+    // TODO: Change so they don't run every time
     currentState = gameState.pressUp(currentState, keys.up);
     currentState = gameState.pressRight(currentState, keys.right);
     currentState = gameState.pressLeft(currentState, keys.left);
@@ -66,13 +68,18 @@ export class GameStage extends Component {
     context.globalAlpha = 0.6;
     context.fillRect(0,0, this.state.viewSize.width, this.state.viewSize.height);
     context.globalAlpha = 1;
-    this.drawShip(context, currentState);
-    this.drawShots(context, currentState);
+    drawHelper.drawShip(context, currentState);
+    drawHelper.drawShots(context, currentState);
+    drawHelper.drawAsteroids(context, currentState);
 
     //Update state with movements
     let newState = currentState;
-    newState = movement.moveShip(newState, this.state.viewSize.width, this.state.viewSize.height);
-    newState = movement.moveShots(newState, this.state.viewSize.width, this.state.viewSize.height);
+    const maxWidth = this.state.viewSize.width;
+    const maxHeight = this.state.viewSize.height;
+
+    newState = movement.moveShip(newState, maxWidth, maxHeight);
+    newState = movement.moveShots(newState, maxWidth, maxHeight);
+    //newState = movement.moveAsteroids(newState, maxHeight, maxWidth);
 
     this.setState({ currentState: newState });
 
@@ -88,41 +95,6 @@ export class GameStage extends Component {
     if (e.keyCode === KEYS.SPACE) { keys.space = value }
 
     this.setState({ keys: keys });
-  }
-
-  drawShip(context, currentState) {
-    context.save();
-    context.translate(currentState.ship.position.x, currentState.ship.position.y);
-    context.rotate(currentState.ship.rotation * Math.PI / 180);
-    context.strokeStyle = '#ffffff';
-    context.fillStyle = '#000000';
-    context.lineWidth = 2;
-    context.beginPath();
-    context.moveTo(0, -15);
-    context.lineTo(10, 10);
-    context.lineTo(5, 7);
-    context.lineTo(-5, 7);
-    context.lineTo(-10, 10);
-    context.closePath();
-    context.fill();
-    context.stroke();
-    context.restore();
-  }
-
-  drawShots(context, currentState) {
-    const shots = currentState.shots;
-    for (let shot in shots) {
-      context.save();
-      context.translate(shots[shot].position.x, shots[shot].position.y);
-      context.rotate(shots[shot].rotation * Math.PI / 180);
-      context.fillStyle = '#FFF';
-      context.lineWidth = 0,5;
-      context.beginPath();
-      context.arc(0, 0, 2, 0, 2 * Math.PI);
-      context.closePath();
-      context.fill();
-      context.restore();
-    }
   }
 
   render() {

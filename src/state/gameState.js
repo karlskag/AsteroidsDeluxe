@@ -16,7 +16,7 @@ function getInitialState(initialPosition) {
       radius: 20,
       lastShot: 0,
     },
-    asteroids: getInitialAsterois(),
+    asteroids: getInitialAsterois(3),
     shots: [],
     gameController : {
       up: 0,
@@ -33,12 +33,12 @@ function getInitialAsterois(numberOfAsteroids) {
   const initialAsteroids = [];
 
   for (let i = 0; i < numberOfAsteroids; i++) {
-    // let initalposition =
-    // let velocity =
-    // let rotation =
-    // let speed =
-    // let vertices = asteroidVertices(3, 40);
-    // let newAsteroid = createAsteroid(initalposition, velocity, rotation, speed, vertices);
+    let initalposition = { x: randomNumBetween(40, 800), y: randomNumBetween(40, 600) };
+    let velocity = { x: 0, y: 0 };
+    let rotation = 100;
+    let speed = 0;
+    let vertices = asteroidVertices(9, 40);
+    let newAsteroid = createAsteroid(initalposition, velocity, rotation, speed, vertices);
 
     initialAsteroids.push(newAsteroid);
   }

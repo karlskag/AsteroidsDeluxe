@@ -99,7 +99,7 @@ export class GameStage extends Component {
 
   render() {
     return (
-      <div>
+      <div className="testVerification">
         <canvas ref="canvas"
         width={this.state.viewSize.width}
         height={this.state.viewSize.height}

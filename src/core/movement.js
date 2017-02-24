@@ -98,7 +98,7 @@ function performShot(state, currentShots, currentPosition, rotation) {
 }
 
 //TODO: Rewrite functions updating position and velocity,
-// 1. Can they be written to use more functional techniques? map()?
+// 1. Can they be written to use more functional techniques? reduce()?
 function calculateShipVelocity(state) {
   let newState = state;
   let newVelocity = state.ship.velocity;
